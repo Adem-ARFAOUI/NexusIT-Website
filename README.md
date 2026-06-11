@@ -1,5 +1,5 @@
 
-  # Event Management Dashboard
+  # Management Dashboard
 
   ## Running the code
 
