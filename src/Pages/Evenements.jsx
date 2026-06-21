@@ -85,79 +85,75 @@ const events = [
   },
 ]
 
-function EventModal({ ev, onClose, joined, onToggle }) {
+function EventModal({ ev, onClose, joined, onToggle, darkMode }) {
   const pct = Math.round((ev.places / ev.maxPlaces) * 100)
+  const text = darkMode ? 'text-white' : 'text-slate-900'
+  const sub = darkMode ? 'text-gray-400' : 'text-slate-500'
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#10102E] border border-purple-500/30 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className={`rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border ${darkMode ? 'bg-[#10102E] border-purple-500/30' : 'bg-white border-purple-200'}`}>
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-900 to-blue-900 p-6 rounded-t-2xl relative">
+        <div className={`p-6 rounded-t-2xl relative ${darkMode ? 'bg-gradient-to-r from-purple-900 to-blue-900' : 'bg-gradient-to-r from-purple-100 to-blue-100'}`}>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl"
+            className={`absolute top-4 right-4 text-2xl ${darkMode ? 'text-gray-400 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}
           >
             ✕
           </button>
           <div className="flex gap-2 mb-3">
             <span className="text-xs bg-purple-600/80 text-white px-3 py-1 rounded-full">{ev.type}</span>
-            <span className="text-xs bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full">+{ev.points} pts</span>
+            <span className="text-xs bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded-full">+{ev.points} pts</span>
           </div>
-          <h2 className="text-2xl font-bold text-white">{ev.title}</h2>
-          <div className="flex flex-wrap gap-4 mt-3 text-gray-300 text-sm">
+          <h2 className={`text-2xl font-bold ${text}`}>{ev.title}</h2>
+          <div className={`flex flex-wrap gap-4 mt-3 text-sm ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
             <span>📅 {ev.dateLabel}</span>
             <span>📍 {ev.lieu}</span>
             <span>👥 {ev.places}/{ev.maxPlaces} places</span>
           </div>
-          {/* Progress */}
           <div className="mt-3">
-            <div className="w-full bg-white/10 rounded-full h-2">
+            <div className={`w-full rounded-full h-2 ${darkMode ? 'bg-white/10' : 'bg-purple-200'}`}>
               <div
                 className="bg-gradient-to-r from-purple-500 to-cyan-400 h-2 rounded-full"
                 style={{width: `${pct}%`}}
               ></div>
             </div>
-            <p className="text-gray-400 text-xs mt-1">{ev.maxPlaces - ev.places} places restantes</p>
+            <p className={`text-xs mt-1 ${sub}`}>{ev.maxPlaces - ev.places} places restantes</p>
           </div>
         </div>
 
         {/* Body */}
         <div className="p-6">
+          <h3 className={`font-semibold mb-2 ${text}`}>📋 Description</h3>
+          <p className={`text-sm leading-relaxed mb-6 ${sub}`}>{ev.description}</p>
 
-          {/* Description */}
-          <h3 className="text-white font-semibold mb-2">📋 Description</h3>
-          <p className="text-gray-400 text-sm leading-relaxed mb-6">{ev.description}</p>
-
-          {/* Programme */}
-          <h3 className="text-white font-semibold mb-3">🗓 Programme</h3>
+          <h3 className={`font-semibold mb-3 ${text}`}>🗓 Programme</h3>
           <div className="flex flex-col gap-2 mb-6">
             {ev.plan.map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-purple-600/30 border border-purple-500/50 flex items-center justify-center text-xs text-purple-400 flex-shrink-0 mt-0.5">
+                <div className="w-6 h-6 rounded-full bg-purple-600/30 border border-purple-500/50 flex items-center justify-center text-xs text-purple-500 flex-shrink-0 mt-0.5">
                   {i + 1}
                 </div>
-                <p className="text-gray-300 text-sm">{step}</p>
+                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>{step}</p>
               </div>
             ))}
           </div>
 
-          {/* Lieu */}
-          <h3 className="text-white font-semibold mb-2">📍 Lieu</h3>
-          <div className="bg-white/5 rounded-xl p-4 mb-6">
-            <p className="text-gray-300 text-sm">{ev.lieu}</p>
+          <h3 className={`font-semibold mb-2 ${text}`}>📍 Lieu</h3>
+          <div className={`rounded-xl p-4 mb-6 ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+            <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>{ev.lieu}</p>
           </div>
 
-          {/* Action */}
           <div className="flex gap-3">
             {joined ? (
               <>
-                <div className="flex-1 bg-green-500/10 border border-green-500/30 text-green-400 py-3 rounded-xl text-sm text-center font-medium">
+                <div className="flex-1 bg-green-500/10 border border-green-500/30 text-green-500 py-3 rounded-xl text-sm text-center font-medium">
                   ✓ Vous êtes inscrit
                 </div>
                 <button
                   onClick={() => { onToggle(ev.id); onClose() }}
-                  className="px-6 py-3 bg-red-500/10 text-red-400 border border-red-500/30 rounded-xl text-sm"
+                  className="px-6 py-3 bg-red-500/10 text-red-500 border border-red-500/30 rounded-xl text-sm"
                 >
                   Se retirer
                 </button>
@@ -171,21 +167,22 @@ function EventModal({ ev, onClose, joined, onToggle }) {
               </button>
             )}
           </div>
-
         </div>
       </div>
     </div>
   )
 }
 
-function Evenements() {
+function Evenements({ darkMode }) {
   const [filter, setFilter] = useState('Tous')
   const [joined, setJoined] = useState({ 1: false, 2: true, 3: true, 4: false })
   const [selected, setSelected] = useState(null)
 
   const today = new Date()
+  const text = darkMode ? 'text-white' : 'text-slate-900'
+  const sub = darkMode ? 'text-gray-400' : 'text-slate-500'
+  const card = darkMode ? 'bg-[#13133A] border-purple-500/20' : 'bg-white border-purple-200 shadow-sm'
 
-  // فلترة حسب date
   const filtered = events.filter(ev => {
     const evDate = new Date(ev.date)
     if (filter === 'À venir') return evDate >= today
@@ -203,37 +200,37 @@ function Evenements() {
   return (
     <div className="p-8">
 
-      {/* Modal */}
       {selected && (
         <EventModal
           ev={selected}
           onClose={() => setSelected(null)}
           joined={joined[selected.id]}
           onToggle={toggleJoin}
+          darkMode={darkMode}
         />
       )}
 
       {/* Hero */}
-      <div className="bg-gradient-to-r from-purple-900/60 to-blue-900/60 border border-purple-500/20 rounded-2xl p-6 mb-6">
-        <p className="text-cyan-400 text-xs uppercase tracking-wider mb-1">Prochain Événement</p>
-        <h2 className="text-2xl font-bold text-white">Hackathon 48h — Build & Ship</h2>
-        <div className="flex gap-4 mt-2 text-gray-400 text-sm">
+      <div className={`rounded-2xl p-6 mb-6 border ${darkMode ? 'bg-gradient-to-r from-purple-900/60 to-blue-900/60 border-purple-500/20' : 'bg-gradient-to-r from-purple-100 to-blue-100 border-purple-200'}`}>
+        <p className="text-cyan-500 text-xs uppercase tracking-wider mb-1">Prochain Événement</p>
+        <h2 className={`text-2xl font-bold ${text}`}>Hackathon 48h — Build & Ship</h2>
+        <div className={`flex flex-wrap gap-4 mt-2 text-sm ${sub}`}>
           <span>📅 22 Juin 2026</span>
           <span>📍 Salle des Workshops</span>
           <span>👥 47/60</span>
         </div>
         <div className="flex gap-3 mt-4">
           {['12','08','34'].map((v, i) => (
-            <div key={i} className="bg-white/10 rounded-xl px-4 py-2 text-center">
-              <p className="text-white font-bold text-xl">{v}</p>
-              <p className="text-gray-400 text-xs">{['Jours','Heures','Min'][i]}</p>
+            <div key={i} className={`rounded-xl px-4 py-2 text-center ${darkMode ? 'bg-white/10' : 'bg-white/70'}`}>
+              <p className={`font-bold text-xl ${text}`}>{v}</p>
+              <p className={`text-xs ${sub}`}>{['Jours','Heures','Min'][i]}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 flex-wrap">
         {['Tous', 'À venir', 'Passés', `Mes participations (${joinedCount})`].map(f => (
           <button
             key={f}
@@ -241,7 +238,7 @@ function Evenements() {
             className={`px-4 py-2 rounded-xl text-sm transition-all ${
               filter === f
                 ? 'bg-cyan-500 text-white'
-                : 'bg-white/5 text-gray-400 hover:text-white'
+                : darkMode ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-slate-100 text-slate-500 hover:text-slate-900'
             }`}
           >
             {f}
@@ -251,29 +248,28 @@ function Evenements() {
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
+        <div className={`text-center py-20 ${sub}`}>
           <p className="text-4xl mb-4">📭</p>
           <p>Aucun événement dans cette catégorie</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map(ev => {
             const pct = Math.round((ev.places / ev.maxPlaces) * 100)
             const isPast = new Date(ev.date) < today
             return (
               <div
                 key={ev.id}
-                className="bg-[#13133A] border border-purple-500/20 rounded-2xl overflow-hidden cursor-pointer hover:border-purple-500/50 transition-all hover:scale-[1.01]"
+                className={`rounded-2xl overflow-hidden cursor-pointer hover:border-purple-500/50 transition-all hover:scale-[1.01] border ${card}`}
                 onClick={() => setSelected(ev)}
               >
-                {/* Image */}
-                <div className="h-40 bg-gradient-to-br from-purple-900 to-blue-900 flex items-center justify-center text-6xl relative">
+                <div className={`h-40 flex items-center justify-center text-6xl relative ${darkMode ? 'bg-gradient-to-br from-purple-900 to-blue-900' : 'bg-gradient-to-br from-purple-200 to-blue-200'}`}>
                   {ev.image}
                   <span className="absolute top-3 left-3 text-xs bg-purple-600/80 text-white px-3 py-1 rounded-full">
                     {ev.type}
                   </span>
                   {isPast && (
-                    <span className="absolute top-3 right-3 text-xs bg-gray-600/80 text-gray-300 px-3 py-1 rounded-full">
+                    <span className="absolute top-3 right-3 text-xs bg-gray-600/80 text-gray-200 px-3 py-1 rounded-full">
                       Passé
                     </span>
                   )}
@@ -284,30 +280,28 @@ function Evenements() {
                   )}
                 </div>
 
-                {/* Content */}
                 <div className="p-5">
-                  <h3 className="text-white font-bold">{ev.title}</h3>
-                  <div className="flex flex-col gap-1 mt-2 text-gray-400 text-sm">
+                  <h3 className={`font-bold ${text}`}>{ev.title}</h3>
+                  <div className={`flex flex-col gap-1 mt-2 text-sm ${sub}`}>
                     <span>📅 {ev.dateLabel}</span>
                     <span>📍 {ev.lieu}</span>
                     <span>👥 {ev.places}/{ev.maxPlaces}</span>
                   </div>
-                  <div className="w-full bg-white/10 rounded-full h-1.5 mt-3">
+                  <div className={`w-full rounded-full h-1.5 mt-3 ${darkMode ? 'bg-white/10' : 'bg-purple-200'}`}>
                     <div
                       className="bg-gradient-to-r from-purple-500 to-cyan-400 h-1.5 rounded-full"
                       style={{width: `${pct}%`}}
                     ></div>
                   </div>
-                  {/* Buttons — stop propagation باش modal ما تتفتحش كي تضغط الزر */}
                   <div className="flex gap-2 mt-4" onClick={e => e.stopPropagation()}>
                     {joined[ev.id] ? (
                       <>
-                        <div className="flex-1 bg-green-500/10 text-green-400 border border-green-500/30 py-2 rounded-xl text-sm text-center">
+                        <div className="flex-1 bg-green-500/10 text-green-500 border border-green-500/30 py-2 rounded-xl text-sm text-center">
                           ✓ Inscrit
                         </div>
                         <button
                           onClick={() => toggleJoin(ev.id)}
-                          className="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/30 rounded-xl text-sm"
+                          className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/30 rounded-xl text-sm"
                         >
                           Retirer
                         </button>
